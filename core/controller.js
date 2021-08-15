@@ -11,7 +11,11 @@ class Controller {
         if (Object.keys(params).length === 0) {
             return this.defaultPage(callback);
         } else {
-            this.callAPI(params, callback);
+            try {
+                this.callAPI(params, callback);
+            } catch (error) {
+                this.showError(callback);
+            }
         }
     }
 
@@ -33,12 +37,23 @@ class Controller {
             const token = result.access_token;
 
             myAnimeList.getAnimesList(token, (animes) => {
-                const title = animes.data[1].node.title;
-                animechan.getAnimeQuotes(title, (quotes) => {
-                    callback(quotes);
-                });
+                try {
+                    const title = animes.data[1].node.title;
+                    animechan.getAnimeQuotes(title, (quotes) => {
+                        callback(quotes);
+                    });
+                } catch (error) {
+                    this.showError(callback);
+                }
             });
         });
+    }
+
+    showError(callback) {
+        const viewManager = new ViewManager();
+        let result = viewManager.loadView("error");
+
+        callback(result);
     }
 }
 

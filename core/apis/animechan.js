@@ -1,7 +1,6 @@
 const https = require("https");
 
 const getAnimeQuotes = (title, callback) => {
-    console.log(title);
     const url = `https://animechan.vercel.app/api/quotes/anime?title=${title}`;
 
     let result = "";
