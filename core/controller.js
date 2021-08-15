@@ -40,7 +40,18 @@ class Controller {
                 try {
                     const title = animes.data[1].node.title;
                     animechan.getAnimeQuotes(title, (quotes) => {
-                        callback(quotes);
+                        quotes = JSON.parse(quotes);
+
+                        let result = `<h2>Quotes from ${title}</h2>`;
+
+                        result += "<ul>";
+
+                        quotes.forEach((element) => {
+                            result += `<li> <strong> ${element.character}: </strong> ${element.quote} </li>`;
+                        });
+
+                        result += "</ul>";
+                        callback(result);
                     });
                 } catch (error) {
                     this.showError(callback);
