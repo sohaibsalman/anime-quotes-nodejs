@@ -9,9 +9,9 @@ const server = http.createServer((req, res) => {
     const request = getRequest();
     request.setRequest(req, () => {
         const app = new App();
-        const result = app.run();
-
-        res.end(result);
+        app.run((result) => {
+            res.end(result);
+        });
     });
 });
 

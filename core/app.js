@@ -1,11 +1,11 @@
 const Router = require("./router");
 
 class App {
-    run() {
+    run(callback) {
         const router = new Router();
-        const result = router.routeRequest();
-
-        return result;
+        router.routeRequest((result) => {
+            callback(result);
+        });
     }
 }
 

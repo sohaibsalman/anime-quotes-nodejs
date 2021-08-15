@@ -17,7 +17,7 @@ const getAnimeQuotes = (title, callback) => {
             });
 
             res.on("end", () => {
-                callback(JSON.parse(result));
+                callback(result);
             });
         }
     );
