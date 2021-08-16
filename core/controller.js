@@ -31,26 +31,32 @@ class Controller {
     }
 
     callAPI(params, callback) {
-        const { authCode } = params;
+        const { authCode, animeName } = params;
 
         myAnimeList.authenticate(authCode, (result) => {
             const token = result.access_token;
 
             myAnimeList.getAnimesList(token, (animes) => {
                 try {
-                    const title = animes.data[1].node.title;
-                    animechan.getAnimeQuotes(title, (quotes) => {
+                    animechan.getAnimeQuotes(animeName, (quotes) => {
                         quotes = JSON.parse(quotes);
 
-                        let result = `<h2>Quotes from ${title}</h2>`;
+                        let result = "";
 
-                        result += "<ul>";
+                        if (quotes.error) {
+                            result = `<h2> ${quotes.error} for ${animeName} </h2>`;
+                        } else {
+                            result = `<h2>Quotes from ${animeName}</h2>`;
 
-                        quotes.forEach((element) => {
-                            result += `<li> <strong> ${element.character}: </strong> ${element.quote} </li>`;
-                        });
+                            result += "<ul>";
 
-                        result += "</ul>";
+                            quotes.forEach((element) => {
+                                result += `<li> <strong> ${element.character}: </strong> ${element.quote} </li>`;
+                            });
+
+                            result += "</ul>";
+                        }
+
                         callback(result);
                     });
                 } catch (error) {
